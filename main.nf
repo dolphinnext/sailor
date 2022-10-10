@@ -7,7 +7,7 @@ if (!params.Genome){params.Genome = ""}
 if (!params.knownSnps){params.knownSnps = ""} 
 if (!params.Alignment){params.Alignment = ""} 
 
-g_0_input0_g_1 = file(params.inputfile, type: 'any')
+Channel.fromPath(params.inputfile, type: 'any').map{ file -> tuple(file.baseName, file) }.set{g_0_sample_set0_g_1}
 g_3_fastaFile1_g_1 = file(params.Genome, type: 'any')
 g_4_bed2_g_1 = file(params.knownSnps, type: 'any')
 Channel.fromPath(params.Alignment, type: 'any').toSortedList().set{g_5_bam_file3_g_1}
@@ -15,15 +15,16 @@ Channel.fromPath(params.Alignment, type: 'any').toSortedList().set{g_5_bam_file3
 
 process Sailor {
 
-publishDir params.outdir, mode: 'copy', saveAs: {filename -> if (filename =~ /.*\/SAILOR-JOB-LOG.txt$/) "outputparam/$filename"}
+publishDir params.outdir, mode: 'copy', saveAs: {filename -> if (filename =~ /${name}\/SAILOR-JOB-LOG.txt$/) "outputparam/$filename"}
 input:
- file input_yaml from g_0_input0_g_1
+ set val(name), file(input_yaml) from g_0_sample_set0_g_1
  file fasta from g_3_fastaFile1_g_1
  file knownSnps from g_4_bed2_g_1
  set alignment from g_5_bam_file3_g_1
 
 output:
- file "*/SAILOR-JOB-LOG.txt"  into g_1_log_file00
+ file "${name}/SAILOR-JOB-LOG.txt"  into g_1_log_file00
+ file "${name}/results"  into g_1_resultsdir11
 
 """
 #shell example: 
