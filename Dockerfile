@@ -16,7 +16,7 @@ RUN export VERSION=1.13 OS=linux ARCH=amd64 && \
     export VERSION=3.7.4 && \
     wget https://github.com/sylabs/singularity/releases/download/v${VERSION}/singularity-${VERSION}.tar.gz && \
     tar -xzf singularity-${VERSION}.tar.gz && \
-    cd singularity && ./mconfig && make -C ./builddir && make -C ./builddir install
+    cd singularity && ./mconfig --without-suid && make -C ./builddir && make -C ./builddir install
 
 RUN mkdir -p /usr/local/bin && cd /usr/local/bin && wget https://s3-us-west-1.amazonaws.com/sailor-1.0.4/sailor-1.0.4
 RUN chmod 755 /usr/local/bin/sailor-1.0.4
