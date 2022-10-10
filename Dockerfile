@@ -1,4 +1,5 @@
-FROM ubuntu:22.04
+FROM ubuntu:xenial
+
 MAINTAINER Alper Kucukural <alper.kucukural@umassmed.edu>
 RUN apt-get update
 RUN apt-get -y upgrade
